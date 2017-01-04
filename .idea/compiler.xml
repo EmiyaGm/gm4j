@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Annotation profile for gm4j" enabled="true">
+        <sourceOutputDir name="../../../Users/gm/Documents/IdeaProject/out/gm4j/generated-sources/annotations" />
+        <sourceTestOutputDir name="../../../Users/gm/Documents/IdeaProject/out/gm4j/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="gm4j" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="gm4j" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
