@@ -28,6 +28,7 @@
         <hibernate.version>5.2.5.Final</hibernate.version>
         <mysql.version>5.1.40</mysql.version>
         <log4j.version>2.7</log4j.version>
+        <shiro.version>1.2.3</shiro.version>
     </properties>
 
     <dependencies>
@@ -99,6 +100,29 @@
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+
+        <!-- Shiro security -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-cas</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <!-- end of Shiro security -->
     </dependencies>
 
     

@@ -1,5 +1,15 @@
 package bootstrap;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
+import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
+import org.apache.shiro.authz.ModularRealmAuthorizer;
+import org.apache.shiro.authz.permission.WildcardPermissionResolver;
+import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.realm.Realm;
+import org.apache.shiro.realm.jdbc.JdbcRealm;
+import org.apache.shiro.subject.Subject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -9,10 +19,12 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.Assert;
 
 import javax.persistence.SharedCacheMode;
 import javax.persistence.ValidationMode;
 import javax.sql.DataSource;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -57,5 +69,35 @@ class base {
     @Bean
     public PlatformTransactionManager transactionManager() {
         return new JpaTransactionManager(this.dbFactory().getObject());
+    }
+
+    //shiro管理
+    @Bean
+    public DefaultSecurityManager securityManager(){
+        DefaultSecurityManager securityManager = new DefaultSecurityManager();
+        //设置authenticator
+        ModularRealmAuthenticator authenticator = new ModularRealmAuthenticator();
+        authenticator.setAuthenticationStrategy(new AtLeastOneSuccessfulStrategy());
+        securityManager.setAuthenticator(authenticator);
+
+        //设置authorizer
+        ModularRealmAuthorizer authorizer = new ModularRealmAuthorizer();
+        authorizer.setPermissionResolver(new WildcardPermissionResolver());
+        securityManager.setAuthorizer(authorizer);
+
+        //设置Realm
+        JdbcRealm jdbcRealm = new JdbcRealm();
+        JndiDataSourceLookup lookup = new JndiDataSourceLookup();
+        jdbcRealm.setDataSource(lookup.getDataSource("jdbc/gm4j"));
+        jdbcRealm.setPermissionsLookupEnabled(true);
+        securityManager.setRealms(Arrays.asList((Realm) jdbcRealm));
+
+        //将SecurityManager设置到SecurityUtils 方便全局使用
+        SecurityUtils.setSecurityManager(securityManager);
+
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken("zhang", "123");
+        subject.login(token);
+        return securityManager;
     }
 }
