@@ -1,7 +1,6 @@
 package bootstrap;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.authz.ModularRealmAuthorizer;
@@ -9,7 +8,6 @@ import org.apache.shiro.authz.permission.WildcardPermissionResolver;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
-import org.apache.shiro.subject.Subject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +17,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.util.Assert;
 
 import javax.persistence.SharedCacheMode;
 import javax.persistence.ValidationMode;
@@ -30,7 +27,7 @@ import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"dao", "service"})
+@ComponentScan(basePackages = {"dao", "service","security"})
 class base {
 
     // Jndi数据源,使用容器的连接池管理会比较好

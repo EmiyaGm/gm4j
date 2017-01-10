@@ -4,11 +4,11 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import javax.servlet.*;
+import java.util.EnumSet;
 
 @Order(1)
 public final class main implements WebApplicationInitializer {
@@ -37,5 +37,11 @@ public final class main implements WebApplicationInitializer {
         servlet = container.addServlet("SpringFramework", new DispatcherServlet(mvcContext));
         servlet.setLoadOnStartup(1);
         servlet.addMapping("*.do");
+
+        // 添加shiro过滤器
+        DelegatingFilterProxy shiroFilter = new DelegatingFilterProxy();
+        shiroFilter.setTargetFilterLifecycle(true);
+        FilterRegistration.Dynamic filterRegistration = container.addFilter("shiroFilter",shiroFilter);
+        filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST,DispatcherType.FORWARD,DispatcherType.INCLUDE),false,"/");
     }
 }
